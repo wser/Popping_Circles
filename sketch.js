@@ -32,11 +32,12 @@ function reset() {
   end = false; // set to not end
   circles.length = 0; // reset array
   totalArea = 0; //reset global counter
-  background(200);
+  //background(200);
 }
 
 function draw() {
   background(200); // set canvas background color / clear canvas
+  restartButton.hide();
   // active conditions
   if (circleFilling && !end) {
     circleSize += diameter / 5; // increase speed of circle diameter growth
@@ -77,6 +78,10 @@ function draw() {
       canvas.height / 2 + 20,
       14
     );
+    restartButton.position(canvas.width / 2 - 80, canvas.height / 2 + 80);
+    restartButton.size(160, 50);
+    textAlign(CENTER);
+    restartButton.show();
   }
 }
 
