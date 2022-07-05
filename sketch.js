@@ -7,19 +7,6 @@ let totalArea = 0;
 let circleColor, circleArea, restartButton;
 
 const circles = [];
-const awards = [
-  'begginer',
-  'junior',
-  'amateur',
-  'professional',
-  'senior',
-  'expert',
-  '...you rule',
-  'amazing',
-  'insane',
-  'unbelievable',
-  'worship',
-];
 const width = 500;
 const height = 500;
 const diameter = 10;
@@ -95,6 +82,10 @@ function draw() {
 }
 
 function getAwardLvl() {
+  // prettier-ignore
+  const awards = [
+    'begginer','junior','amateur','professional','senior','expert','...you rule','amazing','insane','unbelievable','worship',
+  ];
   let level = 0;
   // add calculation for award
   if (circles.length > 2 && totalArea > 5000) level = 1;
