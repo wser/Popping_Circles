@@ -26,11 +26,10 @@ function setup() {
 }
 
 function reset() {
-  background(200);
+  createCanvas(width, height);
   end = false;
-  circles.length = 0; // = [];
+  circles.length = 0; // reset array
   totalArea = 0;
-  console.log('hello');
 }
 
 function draw() {
@@ -49,6 +48,7 @@ function draw() {
   for (const c of circles) c.draw(); // draw all circles in the array of circles
 
   txtMsg('Total area: ' + numberWithDots(round(totalArea)) + ' pixels', 20, 20);
+  txtMsg('Number of balloons : ' + circles.length, 20, 40);
 
   if (end) {
     background(200);
@@ -57,6 +57,11 @@ function draw() {
       'FINAL SCORE: ' + numberWithDots(round(totalArea)) + ' pixels',
       canvas.width / 2,
       canvas.height / 2
+    );
+    txtMsg(
+      'TOTAL BALLOONS: ' + circles.length,
+      canvas.width / 2,
+      canvas.height / 2 + 20
     );
   }
 }
