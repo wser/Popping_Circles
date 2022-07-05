@@ -6,39 +6,37 @@ let circleSize = 0;
 let totalArea = 0;
 let circleColor, circleArea, restartButton;
 
-let canvas;
+let can;
 const circles = [];
 const width = 500;
 const height = 500;
 const diameter = 10;
-const lineWidth = 2;
 
 function setup() {
-  reset();
+  restart();
 
-  canvas.mousePressed(() => {
+  can.mousePressed(() => {
     circleSize = 0; // initial circle size
     circleColor = color(random(255), random(255), random(255)); // set that circle random color to fill with
     circleFilling = true; // start to fill circle
-    strokeWeight(lineWidth); // line thickness
   });
 
   restartButton = createButton('restart');
-  restartButton.mousePressed(reset);
+  restartButton.mousePressed(restart);
 }
 
-function reset() {
-  canvas = createCanvas(width, height); // redraw canvas / clear all
+function restart() {
+  can = createCanvas(width, height); // redraw can / clear all
   end = false; // set to not end
   circles.length = 0; // reset array
   totalArea = 0; //reset global counter
-  //background(200);
+  strokeWeight(1); // line thickness
 }
 
 function draw() {
-  background(200); // set canvas background color / clear canvas
-  restartButton.hide();
-  // active conditions
+  background(230); // set can background color / clear can
+  restartButton.hide(); // hide reset button
+
   if (circleFilling && !end) {
     circleSize += diameter / 5; // increase speed of circle diameter growth
     circleArea = (circleSize / 2) ** 2 * PI; // area of a circle r2*pi
@@ -52,37 +50,49 @@ function draw() {
 
   for (const c of circles) c.draw(); // draw all circles in the array of circles
 
-  txtMsg(
-    'Area saved: ' + numberWithDots(round(totalArea)) + ' pixels',
-    20,
-    20,
-    12
-  );
-  txtMsg('Number of balloons : ' + circles.length, 20, 40, 12);
+  showScore(); // display current score results in front of circles
 
   if (end) {
-    textAlign(CENTER);
-    txtMsg(
-      'FINAL SCORE: ' + numberWithDots(round(totalArea)) + ' pixels',
-      canvas.width / 2,
-      canvas.height / 2 - 40,
-      14
-    );
-
-    console.log(getAwardLvl());
-    txtMsg('YOU ARE: ' + getAwardLvl(), canvas.width / 2, canvas.height / 2, 36);
-
-    txtMsg(
-      'TOTAL NUMBER OF CREATED CIRCLES: ' + circles.length,
-      canvas.width / 2,
-      canvas.height / 2 + 20,
-      14
-    );
-    restartButton.position(canvas.width / 2 - 80, canvas.height / 2 + 80);
+    restartButton.position(can.width / 2 - 80, can.height / 2 + 80);
     restartButton.size(160, 50);
     textAlign(CENTER);
     restartButton.show();
+
+    endText();
   }
+}
+
+function showScore() {
+  textAlign(LEFT);
+  fill(50);
+  textSize(12);
+
+  text('Area: ' + numberWithDots(round(totalArea)) + ' pixels', 20, 20);
+  text('Balloons : ' + circles.length, 20, 40);
+}
+
+function endText() {
+  textAlign(CENTER);
+  fill(50);
+  textSize(14);
+
+  text(
+    'FINAL SCORE: ' + numberWithDots(round(totalArea)) + ' pixels',
+    can.width / 2,
+    can.height / 2 - 40
+  );
+
+  text(
+    'TOTAL NUMBER OF CREATED CIRCLES: ' + circles.length,
+    can.width / 2,
+    can.height / 2 + 20
+  );
+
+  textSize(36);
+  text('YOU ARE: ' + getAwardLvl(), can.width / 2, can.height / 2);
+
+  stroke(255, 204, 0);
+  strokeWeight(4);
 }
 
 function getAwardLvl() {
@@ -104,12 +114,6 @@ function getAwardLvl() {
   if (circles.length > 10 && totalArea > 5000000) level = 10;
 
   return awards[level].toUpperCase();
-}
-
-function txtMsg(txt, x, y, s) {
-  fill(50);
-  textSize(s);
-  text(txt, x, y);
 }
 
 function endConditions() {
