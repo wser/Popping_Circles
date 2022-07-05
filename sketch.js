@@ -4,7 +4,7 @@ let circleFilling = false;
 let end = false;
 let circleSize = 0;
 let totalArea = 0;
-let circleColor, circleArea;
+let circleColor, circleArea, restartButton;
 
 const circles = [];
 const width = 500;
@@ -20,12 +20,22 @@ function setup() {
     circleFilling = true; // start to fill circle
     strokeWeight(lineWidth); // line thickness
   });
+
+  restartButton = createButton('restart');
+  restartButton.mousePressed(reset);
+}
+
+function reset() {
+  background(200);
+  end = false;
+  circles.length = 0; // = [];
+  totalArea = 0;
+  console.log('hello');
 }
 
 function draw() {
-  background(200); // set canvas background color
-
-  if (circleFilling) {
+  background(200); // set canvas background color / clear canvas
+  if (circleFilling && !end) {
     circleSize += diameter / 5; // increase speed of circle diameter growth
     circleArea = (circleSize / 2) ** 2 * PI; // area of a circle r2*pi
     totalArea = totalArea + circleArea; // add to total drawn area
@@ -38,12 +48,12 @@ function draw() {
 
   for (const c of circles) c.draw(); // draw all circles in the array of circles
 
-  txtMsg('Total area: ' + numberWithDots(round(totalArea)) + ' pixels');
+  txtMsg('Total area: ' + numberWithDots(round(totalArea)) + ' pixels', 20, 20);
 
   if (end) {
     background(200);
-    fill(50);
-    text(
+    textAlign(CENTER);
+    txtMsg(
       'FINAL SCORE: ' + numberWithDots(round(totalArea)) + ' pixels',
       canvas.width / 2,
       canvas.height / 2
@@ -51,9 +61,9 @@ function draw() {
   }
 }
 
-function txtMsg(txt) {
+function txtMsg(txt, x, y) {
   fill(50);
-  text(txt, 20, 20);
+  text(txt, x, y);
 }
 
 function endConditions() {
