@@ -10,6 +10,12 @@ const width = 500;
 const height = 500;
 const diameter = 10;
 
+function centerCanvas() {
+  var x = (windowWidth - width) / 2;
+  var y = (windowHeight - height) / 2;
+  can.position(x, y);
+}
+
 function setup() {
   restart();
 
@@ -18,6 +24,8 @@ function setup() {
     circleColor = color(random(255), random(255), random(255)); // set that circle random color to fill with
     circleFilling = true; // start to fill circle
   });
+
+  centerCanvas();
 
   restartButton = createButton('restart');
   restartButton.mousePressed(restart);
@@ -51,7 +59,10 @@ function draw() {
   showScore(); // display current score results in front of circles
 
   if (end) {
-    restartButton.position(can.width / 2 - 80, can.height / 2 + 80);
+    restartButton.position(
+      (windowWidth - width) / 2 + can.width / 2 - 80,
+      (windowHeight - height) / 2 + can.height / 2 + 80
+    );
     restartButton.size(160, 50);
     textAlign(CENTER);
     restartButton.show();
@@ -149,6 +160,10 @@ function mouseReleased() {
   if (circleFilling && !end)
     circles.push(new Circle(mouseX, mouseY, circleSize, circleColor)); // if not touched, add to an array
   circleFilling = false; // stop filling the circle
+}
+
+function windowResized() {
+  centerCanvas();
 }
 
 function numberWithDots(x) {
