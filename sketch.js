@@ -44,6 +44,7 @@ function reset() {
   end = false; // set to not end
   circles.length = 0; // reset array
   totalArea = 0; //reset global counter
+  background(200);
 }
 
 function draw() {
@@ -77,21 +78,18 @@ function draw() {
     txtMsg(
       'FINAL SCORE: ' + numberWithDots(round(totalArea)) + ' pixels',
       canvas.width / 2,
-      canvas.height / 2,
+      canvas.height / 2 - 40,
       12
     );
+
+    console.log(getAwardLvl());
+    txtMsg('YOU ARE: ' + getAwardLvl(), canvas.width / 2, canvas.height / 2, 40);
+
     txtMsg(
       'TOTAL NUMBER OF CREATED CIRCLES: ' + circles.length,
       canvas.width / 2,
       canvas.height / 2 + 20,
       12
-    );
-    console.log(getAwardLvl());
-    txtMsg(
-      'YOU ARE: ' + getAwardLvl().toUpperCase(),
-      canvas.width / 2,
-      canvas.height / 2 + 70,
-      40
     );
   }
 }
@@ -99,18 +97,18 @@ function draw() {
 function getAwardLvl() {
   let level = 0;
   // add calculation for award
-  if (circles.length > 10 && totalArea > 5000000) level = 10;
-  if (circles.length > 9 && totalArea > 4000000) level = 9;
-  if (circles.length > 8 && totalArea > 3000000) level = 8;
-  if (circles.length > 7 && totalArea > 2000000) level = 7;
-  if (circles.length > 6 && totalArea > 1000000) level = 6;
-  if (circles.length > 5 && totalArea > 500000) level = 5;
-  if (circles.length > 4 && totalArea > 100000) level = 4;
-  if (circles.length > 3 && totalArea > 50000) level = 3;
-  if (circles.length > 2 && totalArea > 10000) level = 2;
   if (circles.length > 2 && totalArea > 5000) level = 1;
+  if (circles.length > 2 && totalArea > 10000) level = 2;
+  if (circles.length > 3 && totalArea > 50000) level = 3;
+  if (circles.length > 4 && totalArea > 100000) level = 4;
+  if (circles.length > 5 && totalArea > 500000) level = 5;
+  if (circles.length > 6 && totalArea > 1000000) level = 6;
+  if (circles.length > 7 && totalArea > 2000000) level = 7;
+  if (circles.length > 8 && totalArea > 3000000) level = 8;
+  if (circles.length > 9 && totalArea > 4000000) level = 9;
+  if (circles.length > 10 && totalArea > 5000000) level = 10;
 
-  return awards[level];
+  return awards[level].toUpperCase();
 }
 
 function txtMsg(txt, x, y, s) {
