@@ -4,9 +4,22 @@ let circleFilling = false;
 let end = false;
 let circleSize = 0;
 let totalArea = 0;
-let circleColor, circleArea, circlesNum, restartButton;
+let circleColor, circleArea, restartButton;
 
 const circles = [];
+const awards = [
+  'begginer',
+  'junior',
+  'amateur',
+  'professional',
+  'senior',
+  'expert',
+  'you rule',
+  'amazing',
+  'insane',
+  'unbelievable',
+  'worship',
+];
 const width = 500;
 const height = 500;
 const diameter = 10;
@@ -27,10 +40,10 @@ function setup() {
 }
 
 function reset() {
-  createCanvas(width, height);
-  end = false;
+  createCanvas(width, height); // redraw canvas / clear all
+  end = false; // set to not end
   circles.length = 0; // reset array
-  totalArea = 0;
+  totalArea = 0; //reset global counter
 }
 
 function draw() {
@@ -49,28 +62,42 @@ function draw() {
 
   for (const c of circles) c.draw(); // draw all circles in the array of circles
 
-  txtMsg('Area saved: ' + numberWithDots(round(totalArea)) + ' pixels', 20, 20);
-  txtMsg('Number of balloons : ' + circles.length, 20, 40);
+  txtMsg(
+    'Area saved: ' + numberWithDots(round(totalArea)) + ' pixels',
+    20,
+    20,
+    12
+  );
+  txtMsg('Number of balloons : ' + circles.length, 20, 40, 12);
 
   if (end) {
     background(200);
-    circlesNum = circles.length; // add number of circles to variable
+
     textAlign(CENTER);
     txtMsg(
       'FINAL SCORE: ' + numberWithDots(round(totalArea)) + ' pixels',
       canvas.width / 2,
-      canvas.height / 2
+      canvas.height / 2,
+      12
     );
     txtMsg(
-      'TOTAL NUMBER OF CREATED CIRCLES: ' + circlesNum,
+      'TOTAL NUMBER OF CREATED CIRCLES: ' + circles.length,
       canvas.width / 2,
-      canvas.height / 2 + 20
+      canvas.height / 2 + 20,
+      12
+    );
+    txtMsg(
+      'YOU ARE: ' + awards[1].toUpperCase(),
+      canvas.width / 2,
+      canvas.height / 2 + 70,
+      40
     );
   }
 }
 
-function txtMsg(txt, x, y) {
+function txtMsg(txt, x, y, s) {
   fill(50);
+  textSize(s);
   text(txt, x, y);
 }
 
@@ -106,7 +133,7 @@ function isOffCanvas() {
 }
 
 function mouseReleased() {
-  if (circleFilling)
+  if (circleFilling && !end)
     circles.push(new Circle(mouseX, mouseY, circleSize, circleColor)); // if not touched, add to an array
   circleFilling = false; // stop filling the circle
 }
@@ -126,6 +153,6 @@ class Circle {
   draw() {
     fill(this.color);
     circle(this.x, this.y, this.size);
-    this.color.setAlpha(128 + 128 * sin(millis() / 500));
+    // this.color.setAlpha(128 + 128 * sin(millis() / 500));
   }
 }
