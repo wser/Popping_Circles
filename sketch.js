@@ -4,7 +4,7 @@ let circleFilling = false;
 let end = false;
 let circleSize = 0;
 let totalArea = 0;
-let circleColor, circleArea, restartButton;
+let circleColor, circleArea, circlesNum, restartButton;
 
 const circles = [];
 const width = 500;
@@ -14,6 +14,7 @@ const lineWidth = 2;
 
 function setup() {
   const canvas = createCanvas(width, height); // create canvas to draw on
+
   canvas.mousePressed(() => {
     circleSize = 0; // initial circle size
     circleColor = color(random(255), random(255), random(255)); // set that circle random color to fill with
@@ -34,6 +35,7 @@ function reset() {
 
 function draw() {
   background(200); // set canvas background color / clear canvas
+  // active conditions
   if (circleFilling && !end) {
     circleSize += diameter / 5; // increase speed of circle diameter growth
     circleArea = (circleSize / 2) ** 2 * PI; // area of a circle r2*pi
@@ -47,11 +49,12 @@ function draw() {
 
   for (const c of circles) c.draw(); // draw all circles in the array of circles
 
-  txtMsg('Total area: ' + numberWithDots(round(totalArea)) + ' pixels', 20, 20);
+  txtMsg('Area saved: ' + numberWithDots(round(totalArea)) + ' pixels', 20, 20);
   txtMsg('Number of balloons : ' + circles.length, 20, 40);
 
   if (end) {
     background(200);
+    circlesNum = circles.length; // add number of circles to variable
     textAlign(CENTER);
     txtMsg(
       'FINAL SCORE: ' + numberWithDots(round(totalArea)) + ' pixels',
@@ -59,7 +62,7 @@ function draw() {
       canvas.height / 2
     );
     txtMsg(
-      'TOTAL BALLOONS: ' + circles.length,
+      'TOTAL NUMBER OF CREATED CIRCLES: ' + circlesNum,
       canvas.width / 2,
       canvas.height / 2 + 20
     );
@@ -123,6 +126,6 @@ class Circle {
   draw() {
     fill(this.color);
     circle(this.x, this.y, this.size);
-    // this.color.setAlpha(128 + 128 * sin(millis() / 500));
+    this.color.setAlpha(128 + 128 * sin(millis() / 500));
   }
 }
