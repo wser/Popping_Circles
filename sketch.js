@@ -1,9 +1,10 @@
 // new Q5('global');
 
 let circleFilling = false;
+let end = false;
 let circleSize = 0;
 let totalArea = 0;
-let circleColor, area;
+let circleColor, circleArea;
 
 const circles = [];
 const width = 500;
@@ -12,7 +13,7 @@ const diameter = 10;
 const lineWidth = 2;
 
 function setup() {
-  var canvas = createCanvas(width, height); // create canvas to draw on
+  const canvas = createCanvas(width, height); // create canvas to draw on
   canvas.mousePressed(() => {
     circleSize = 0; // initial circle size
     circleColor = color(random(255), random(255), random(255)); // set that circle random color to fill with
@@ -26,41 +27,53 @@ function draw() {
 
   if (circleFilling) {
     circleSize += diameter / 5; // increase speed of circle diameter growth
+    circleArea = (circleSize / 2) ** 2 * PI; // area of a circle r2*pi
+    totalArea = totalArea + circleArea; // add to total drawn area
 
-    const overlappingCircle = getOverlappingCircle();
-    if (overlappingCircle) {
-      circleFilling = false; // stop filling if circles collide
-      circles.splice(circles.indexOf(overlappingCircle), 1); // remove active circle and touched one
-    }
-
-    if (isOffCanvas()) circleFilling = false; // stop drawing if is offscreen
+    endConditions(); // check if end condition exists
 
     fill(circleColor); // fill circle with color
     circle(mouseX, mouseY, circleSize); // make circle
-
-    area = (circleSize / 2) ** 2 * PI; // area of a circle r2*pi
-    totalArea = totalArea + area; // add to total drawn area
   }
 
-  for (const c of circles) {
-    c.draw(); // draw all circles in the array of circles
-  }
+  for (const c of circles) c.draw(); // draw all circles in the array of circles
 
+  txtMsg('Total area: ' + numberWithDots(round(totalArea)) + ' pixels');
+
+  if (end) {
+    background(200);
+    fill(50);
+    text(
+      'FINAL SCORE: ' + numberWithDots(round(totalArea)) + ' pixels',
+      canvas.width / 2,
+      canvas.height / 2
+    );
+  }
+}
+
+function txtMsg(txt) {
   fill(50);
-  text(
-    'Total area: ' + numberWithDots(round(totalArea)) + ' pixels',
-    20,
-    20
-    // mouseX,
-    // mouseY
-  ); // write text/total score
+  text(txt, 20, 20);
+}
+
+function endConditions() {
+  const overlappingCircle = getOverlappingCircle();
+  if (overlappingCircle) {
+    circleFilling = false; // stop filling if circles collide
+    circles.splice(circles.indexOf(overlappingCircle), 1); // remove active circle and touched one
+    end = true;
+  }
+
+  if (isOffCanvas()) {
+    circleFilling = false; // stop drawing if is offscreen
+    end = true;
+  }
 }
 
 function getOverlappingCircle() {
-  for (const c of circles) {
+  for (const c of circles)
     if (dist(c.x, c.y, mouseX, mouseY) < circleSize / 2 + c.size / 2 + 2)
       return c;
-  }
 
   return undefined;
 }
@@ -95,6 +108,6 @@ class Circle {
   draw() {
     fill(this.color);
     circle(this.x, this.y, this.size);
-    this.color.setAlpha(128 + 128 * sin(millis() / 500));
+    // this.color.setAlpha(128 + 128 * sin(millis() / 500));
   }
 }
