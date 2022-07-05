@@ -1,5 +1,3 @@
-// new Q5('global');
-
 let circleFilling = false;
 let end = false;
 let circleSize = 0;
