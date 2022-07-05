@@ -6,6 +6,7 @@ let circleSize = 0;
 let totalArea = 0;
 let circleColor, circleArea, restartButton;
 
+let canvas;
 const circles = [];
 const width = 500;
 const height = 500;
@@ -13,7 +14,7 @@ const diameter = 10;
 const lineWidth = 2;
 
 function setup() {
-  const canvas = createCanvas(width, height); // create canvas to draw on
+  reset();
 
   canvas.mousePressed(() => {
     circleSize = 0; // initial circle size
@@ -27,7 +28,7 @@ function setup() {
 }
 
 function reset() {
-  createCanvas(width, height); // redraw canvas / clear all
+  canvas = createCanvas(width, height); // redraw canvas / clear all
   end = false; // set to not end
   circles.length = 0; // reset array
   totalArea = 0; //reset global counter
@@ -59,24 +60,22 @@ function draw() {
   txtMsg('Number of balloons : ' + circles.length, 20, 40, 12);
 
   if (end) {
-    background(200);
-
     textAlign(CENTER);
     txtMsg(
       'FINAL SCORE: ' + numberWithDots(round(totalArea)) + ' pixels',
       canvas.width / 2,
       canvas.height / 2 - 40,
-      12
+      14
     );
 
     console.log(getAwardLvl());
-    txtMsg('YOU ARE: ' + getAwardLvl(), canvas.width / 2, canvas.height / 2, 40);
+    txtMsg('YOU ARE: ' + getAwardLvl(), canvas.width / 2, canvas.height / 2, 36);
 
     txtMsg(
       'TOTAL NUMBER OF CREATED CIRCLES: ' + circles.length,
       canvas.width / 2,
       canvas.height / 2 + 20,
-      12
+      14
     );
   }
 }
