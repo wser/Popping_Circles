@@ -38,7 +38,7 @@ function draw() {
   restartButton.hide(); // hide reset button
 
   if (circleFilling && !end) {
-    circleSize += diameter / 5; // increase speed of circle diameter growth
+    circleSize += diameter / 3; // increase speed of circle diameter growth
     circleArea = (circleSize / 2) ** 2 * PI; // area of a circle r2*pi
     totalArea = totalArea + circleArea; // add to total drawn area
 
@@ -168,6 +168,6 @@ class Circle {
   draw() {
     fill(this.color);
     circle(this.x, this.y, this.size);
-    // this.color.setAlpha(128 + 128 * sin(millis() / 500));
+    this.color.setAlpha(128 + 128 * sin(millis() / 500));
   }
 }
