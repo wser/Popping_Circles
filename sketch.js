@@ -3,13 +3,13 @@ let circleFilling = false;
 let end = false;
 let circleSize = 0;
 let totalArea = 0;
+let totalPixl = 0;
+let perct = 0;
 let bg = 0;
 let sat = 50;
 let touchended = false;
 let touchstarted = false;
 const circles = [];
-//const width = windowWidth; //500;
-//const height = windowHeight; //500;
 const diameter = 10;
 
 /* P5.js implemented functions */
@@ -27,13 +27,11 @@ function setup() {
 
 function draw() {
   background(230); // set can background color / clear can
-  //background(bg, sat, 100);
+  //background(bg, sat, 100); // interactive background
   restartButton.hide(); // hide reset button
 
   if (circleFilling && !end) {
-    circleSize += diameter / 3; // increase speed of circle diameter growth
-    circleArea = (circleSize / 2) ** 2 * PI; // area of a circle r2*pi
-    totalArea = totalArea + circleArea; // add to total drawn area
+    calcArea(); // calculate coloured area
 
     endConditions(); // check if end condition exists
 
@@ -77,16 +75,12 @@ function windowResized() {
 /////////////////////////////
 /* custom functions*/
 
-function initialSettings() {
-  circleSize = 0; // initial circle size
-  circleColor = color(random(255), random(255), random(255)); // set that circle random color to fill with
-  circleFilling = true; // start to fill circle
-}
-
 function handleMouseAndTouch() {
   //bg = map(mouseX, 0, width, 0, 360);
   //sat = map(mouseY, 0, height, 0, 100);
-  initialSettings();
+  circleSize = 0; // initial circle size
+  circleColor = color(random(255), random(255), random(255)); // set that circle random color to fill with
+  circleFilling = true; // start to fill circle
   touchstarted = true;
   touchended = false;
   return false;
@@ -100,12 +94,15 @@ function restart() {
   end = false; // set to not end
   circles.length = 0; // reset array
   totalArea = 0; //reset global counter
+  perct = 0;
+  totalPixl = windowWidth * windowHeight;
 
   can = createCanvas(windowWidth, windowHeight); // redraw can / clear all
-  can.touchStarted(() => handleMouseAndTouch());
-  can.mousePressed(() => handleMouseAndTouch());
 
-  strokeWeight(1); // line thickness
+  strokeWeight(1); // line thickness of circle
+
+  if (is_touch_enabled()) return can.touchStarted(() => handleMouseAndTouch());
+  else return can.mousePressed(() => handleMouseAndTouch());
 }
 
 function showScore() {
@@ -113,8 +110,17 @@ function showScore() {
   fill(50);
   textSize(12);
 
-  text('Area: ' + numberWithDots(round(totalArea)) + ' pixels', 20, 20);
-  text('Balloons : ' + circles.length, 20, 40);
+  text('Total pixels: ' + numberWithDots(round(totalPixl)) + ' pixels', 20, 20);
+  text(
+    'Colored area: ' +
+      numberWithDots(round(totalArea)) +
+      ' pixels || ' +
+      perct +
+      '%',
+    20,
+    40
+  );
+  text('Circles : ' + circles.length, 20, 60);
 }
 
 function endText() {
@@ -194,13 +200,30 @@ function isOffCanvas() {
 }
 
 function onEnd() {
-  if (circleFilling && !end)
+  if (circleFilling && !end) {
     circles.push(new Circle(mouseX, mouseY, circleSize, circleColor)); // if not touched, add to an array
-  circleFilling = false; // stop filling the circle
+    circleFilling = false; // stop filling the circle
+    return false;
+  }
 }
 
 function numberWithDots(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
+
+function is_touch_enabled() {
+  return (
+    'ontouchstart' in window ||
+    navigator.maxTouchPoints > 0 ||
+    navigator.msMaxTouchPoints > 0
+  );
+}
+
+function calcArea() {
+  circleSize += diameter; // increase speed of circle diameter growth
+  circleArea = (circleSize / 2) * (circleSize / 2) * PI; // area of a circle r2*pi
+  totalArea = totalArea + circleArea; // add to total drawn area
+  perct = ((totalArea / totalPixl) * 100).toFixed(2);
 }
 
 class Circle {
@@ -214,6 +237,7 @@ class Circle {
   draw() {
     fill(this.color);
     circle(this.x, this.y, this.size);
+    //ellipse(this.x, this.y, this.size, this.size);
     //this.color.setAlpha(128 + 128 * sin(millis() / 500));
   }
 }
