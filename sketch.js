@@ -15,7 +15,7 @@ const diameter = 10;
 /* P5.js implemented functions */
 function setup() {
   pixelDensity(displayDensity());
-  //colorMode(HSB);
+  colorMode(RGB, 100);
 
   restart();
 
@@ -26,8 +26,8 @@ function setup() {
 }
 
 function draw() {
-  background(230); // set can background color / clear can
-  //background(bg, sat, 100); // interactive background
+  //background(230); // set can background color / clear can
+  background(bg, sat, 100); // interactive background
   restartButton.hide(); // hide reset button
 
   if (circleFilling && !end) {
@@ -76,8 +76,8 @@ function windowResized() {
 /* custom functions*/
 
 function handleMouseAndTouch() {
-  //bg = map(mouseX, 0, width, 0, 360);
-  //sat = map(mouseY, 0, height, 0, 100);
+  bg = map(mouseX, 0, width, 0, 360);
+  sat = map(mouseY, 0, height, 0, 100);
   circleSize = 0; // initial circle size
   circleColor = color(random(255), random(255), random(255)); // set that circle random color to fill with
   circleFilling = true; // start to fill circle
@@ -238,6 +238,6 @@ class Circle {
     fill(this.color);
     circle(this.x, this.y, this.size);
     //ellipse(this.x, this.y, this.size, this.size);
-    //this.color.setAlpha(128 + 128 * sin(millis() / 500));
+    this.color.setAlpha(128 + 128 * sin(millis() / 500));
   }
 }
