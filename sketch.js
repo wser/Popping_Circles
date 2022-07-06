@@ -9,12 +9,12 @@ let sat = 50;
 let touchended = false;
 let touchstarted = false;
 const circles = [];
-const diameter = 10;
+const diameter = 20;
 
 /* P5.js implemented functions */
 function setup() {
   pixelDensity(displayDensity());
-  colorMode(RGB, 100);
+  colorMode(RGB, 128);
 
   restart();
 
@@ -183,7 +183,7 @@ function endConditions() {
 
 function getOverlappingCircle() {
   for (const c of circles)
-    if (dist(c.x, c.y, mouseX, mouseY) < circleSize / 2 + c.size / 2 + 2)
+    if (dist(c.x, c.y, mouseX, mouseY) < circleSize * 0.5 + c.size * 0.5 + 2)
       return c;
 
   return undefined;
