@@ -25,8 +25,8 @@ function setup() {
 }
 
 function draw() {
-  //background(230); // set can background color / clear can
-  background(bg, sat, 100); // interactive background
+  background(230); // set can background color / clear can
+  //background(bg, sat, 100); // interactive background
   restartButton.hide(); // hide reset button
 
   if (circleFilling && !end) {
@@ -242,6 +242,6 @@ class Circle {
     fill(this.color);
     circle(this.x, this.y, this.size);
     //ellipse(this.x, this.y, this.size, this.size);
-    this.color.setAlpha(128 + 128 * sin(millis() / 500));
+    if (end) this.color.setAlpha(128 + 128 * sin(millis() / 500));
   }
 }
