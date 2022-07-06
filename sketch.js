@@ -1,29 +1,23 @@
+let circleColor, circleArea, restartButton, can;
 let circleFilling = false;
 let end = false;
 let circleSize = 0;
 let totalArea = 0;
-let circleColor, circleArea, restartButton;
-
-let can;
+let bg = 0;
+let sat = 50;
+let touchended = false;
+let touchstarted = false;
 const circles = [];
-const width = 500;
-const height = 500;
+//const width = windowWidth; //500;
+//const height = windowHeight; //500;
 const diameter = 10;
 
-function centerCanvas() {
-  var x = (windowWidth - width) / 2;
-  var y = (windowHeight - height) / 2;
-  can.position(x, y);
-}
-
+/* P5.js implemented functions */
 function setup() {
-  restart();
+  pixelDensity(displayDensity());
+  //colorMode(HSB);
 
-  can.mousePressed(() => {
-    circleSize = 0; // initial circle size
-    circleColor = color(random(255), random(255), random(255)); // set that circle random color to fill with
-    circleFilling = true; // start to fill circle
-  });
+  restart();
 
   centerCanvas();
 
@@ -31,16 +25,9 @@ function setup() {
   restartButton.mousePressed(restart);
 }
 
-function restart() {
-  can = createCanvas(width, height); // redraw can / clear all
-  end = false; // set to not end
-  circles.length = 0; // reset array
-  totalArea = 0; //reset global counter
-  strokeWeight(1); // line thickness
-}
-
 function draw() {
   background(230); // set can background color / clear can
+  //background(bg, sat, 100);
   restartButton.hide(); // hide reset button
 
   if (circleFilling && !end) {
@@ -59,16 +46,68 @@ function draw() {
   showScore(); // display current score results in front of circles
 
   if (end) {
+    textAlign(CENTER);
     restartButton.position(
       (windowWidth - width) / 2 + can.width / 2 - 80,
       (windowHeight - height) / 2 + can.height / 2 + 80
     );
     restartButton.size(160, 50);
-    textAlign(CENTER);
     restartButton.show();
 
     endText();
   }
+}
+
+function touchEnded() {
+  if (touches.length == 0) {
+    touchended = true;
+    touchstarted = false;
+  }
+  onEnd();
+}
+
+function mouseReleased() {
+  onEnd();
+}
+
+function windowResized() {
+  centerCanvas();
+}
+
+/////////////////////////////
+/* custom functions*/
+
+function initialSettings() {
+  circleSize = 0; // initial circle size
+  circleColor = color(random(255), random(255), random(255)); // set that circle random color to fill with
+  circleFilling = true; // start to fill circle
+}
+
+function handleMouseAndTouch() {
+  //bg = map(mouseX, 0, width, 0, 360);
+  //sat = map(mouseY, 0, height, 0, 100);
+  initialSettings();
+  touchstarted = true;
+  touchended = false;
+  return false;
+}
+
+function centerCanvas() {
+  let x = (windowWidth - width) / 2;
+  let y = (windowHeight - height) / 2;
+  can.position(x, y);
+}
+
+function restart() {
+  end = false; // set to not end
+  circles.length = 0; // reset array
+  totalArea = 0; //reset global counter
+
+  can = createCanvas(windowWidth, windowHeight); // redraw can / clear all
+  can.touchStarted(() => handleMouseAndTouch());
+  can.mousePressed(() => handleMouseAndTouch());
+
+  strokeWeight(1); // line thickness
 }
 
 function showScore() {
@@ -156,14 +195,10 @@ function isOffCanvas() {
   );
 }
 
-function mouseReleased() {
+function onEnd() {
   if (circleFilling && !end)
     circles.push(new Circle(mouseX, mouseY, circleSize, circleColor)); // if not touched, add to an array
   circleFilling = false; // stop filling the circle
-}
-
-function windowResized() {
-  centerCanvas();
 }
 
 function numberWithDots(x) {
@@ -181,6 +216,6 @@ class Circle {
   draw() {
     fill(this.color);
     circle(this.x, this.y, this.size);
-    this.color.setAlpha(128 + 128 * sin(millis() / 500));
+    //this.color.setAlpha(128 + 128 * sin(millis() / 500));
   }
 }
