@@ -1,8 +1,7 @@
-let circleColor, circleArea, restartButton, can;
+let circleColor, circleArea, totalArea, restartButton, can;
 let circleFilling = false;
 let end = false;
 let circleSize = 0;
-let totalArea = 0;
 let totalPixl = 0;
 let perct = 0;
 let bg = 0;
@@ -31,17 +30,16 @@ function draw() {
   restartButton.hide(); // hide reset button
 
   if (circleFilling && !end) {
-    calcArea(); // calculate coloured area
-
     endConditions(); // check if end condition exists
 
     fill(circleColor); // fill circle with color
     circle(mouseX, mouseY, circleSize); // make circle
+    circleSize += diameter; // increase speed of circle diameter growth
   }
 
-  for (const c of circles) c.draw(); // draw all circles in the array of circles
-
   showScore(); // display current score results in front of circles
+
+  for (const c of circles) c.draw(); // draw all circles in the array of circles
 
   if (end) {
     textAlign(CENTER);
@@ -95,6 +93,7 @@ function restart() {
   circles.length = 0; // reset array
   totalArea = 0; //reset global counter
   perct = 0;
+  circleSize = 0;
   totalPixl = windowWidth * windowHeight;
 
   can = createCanvas(windowWidth, windowHeight); // redraw can / clear all
@@ -202,9 +201,21 @@ function isOffCanvas() {
 function onEnd() {
   if (circleFilling && !end) {
     circles.push(new Circle(mouseX, mouseY, circleSize, circleColor)); // if not touched, add to an array
-    circleFilling = false; // stop filling the circle
-    return false;
   }
+  circleFilling = false; // stop filling the circle
+
+  calcArea(); // calculate coloured area
+  return false;
+}
+
+function calcArea() {
+  totalArea = 0;
+  for (const c of circles) {
+    circleArea = (c.size * 0.5) ** 2 * PI; // area of a every circle r2*pi
+    totalArea += circleArea;
+  }
+
+  perct = ((totalArea / totalPixl) * 100).toFixed(2);
 }
 
 function numberWithDots(x) {
@@ -217,13 +228,6 @@ function is_touch_enabled() {
     navigator.maxTouchPoints > 0 ||
     navigator.msMaxTouchPoints > 0
   );
-}
-
-function calcArea() {
-  circleSize += diameter; // increase speed of circle diameter growth
-  circleArea = (circleSize / 2) * (circleSize / 2) * PI; // area of a circle r2*pi
-  totalArea = totalArea + circleArea; // add to total drawn area
-  perct = ((totalArea / totalPixl) * 100).toFixed(2);
 }
 
 class Circle {
