@@ -93,9 +93,7 @@ function handleMouseAndTouch() {
 }
 
 function centerCanvas() {
-  let x = (windowWidth - width) / 2;
-  let y = (windowHeight - height) / 2;
-  can.position(x, y);
+  restart();
 }
 
 function restart() {
