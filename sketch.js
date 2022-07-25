@@ -13,7 +13,8 @@ const diameter = 20;
 
 /* P5.js implemented functions */
 function setup() {
-  pixelDensity(displayDensity());
+  // pixelDensity(displayDensity());
+  pixelDensity(1);
   colorMode(RGB, 128);
 
   restart();
